@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import ovh.plrapps.mapview.MapView
 import ovh.plrapps.mapview.MapViewConfiguration
+import ovh.plrapps.mapview.api.MinimumScaleMode
 import ovh.plrapps.mapview.core.TileStreamProvider
 import ovh.plrapps.mapview.demo.R
 
@@ -39,15 +40,19 @@ class MapAloneFragment : Fragment() {
         val mapView = view.findViewById<MapView>(R.id.mapview) ?: return
         val tileStreamProvider = TileStreamProvider { row, col, zoomLvl ->
             try {
-                view.context.assets?.open("tiles/esp/$zoomLvl/$row/$col.jpg")
+                view.context.assets?.open("tiles2/$zoomLvl/${col}_$row.png")
             } catch (e: Exception) {
                 null
             }
         }
-        val tileSize = 256
+        val tileSize = 512
         val config = MapViewConfiguration(
-                5, 8192, 8192, tileSize, tileStreamProvider
-        ).setMaxScale(2f)
+                4, 2788, 1515, tileSize, tileStreamProvider
+        )
+                .setMaxScale(5.0f + 2)
+                .setMinScale(0.2f)
+                .setMinimumScaleMode(MinimumScaleMode.NONE)
+                .setPadding(tileSize * 2);
 
         mapView.configure(config)
     }
